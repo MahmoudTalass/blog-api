@@ -1,5 +1,6 @@
 const createError = require("http-errors");
 const express = require("express");
+const errorHandler = require("./src/middlewares/error_handler");
 
 require("dotenv").config();
 require("./src/configs/db.config");
@@ -11,7 +12,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use("/", indexRouter);
+app.use("/api", indexRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -19,8 +20,6 @@ app.use(function (req, res, next) {
 });
 
 // error handler
-app.use(function (err, req, res, next) {
-   res.sendStatus(err.status || 500).json({ message: err.message });
-});
+app.use(errorHandler);
 
 module.exports = app;
