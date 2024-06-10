@@ -40,17 +40,6 @@ class PostsService {
       await Post.findByIdAndUpdate(postId, { $set: post }).exec();
    }
 
-   async updatePost(authorId, title, text, isPublished, postId) {
-      const post = {
-         author: authorId,
-         title,
-         text,
-         is_published: isPublished,
-      };
-
-      await Post.findByIdAndUpdate(postId, { $set: post }).exec();
-   }
-
    async deletePost(postId) {
       await Post.findByIdAndDelete(postId).exec();
    }
