@@ -43,7 +43,7 @@ class PostsService {
    }
 
    async updatePost(authorId, title, text, isPublished, postId) {
-      const post = await findById(postId).exec();
+      const post = await Post.findById(postId).exec();
 
       if (post === null) {
          throw new AppError("Post not found", 404);
@@ -60,7 +60,7 @@ class PostsService {
    }
 
    async deletePost(postId) {
-      const post = await findById(postId).exec();
+      const post = await Post.findById(postId).exec();
 
       if (post === null) {
          throw new AppError("Post not found", 404);
