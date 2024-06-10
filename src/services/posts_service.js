@@ -4,11 +4,7 @@ const AppError = require("../utils/app_error");
 
 class PostsService {
    async getAllPosts() {
-      try {
-         await Post.find().populate("author").exec();
-      } catch (error) {
-         new AppError("Failed to retrieve posts");
-      }
+      await Post.find().populate("author").exec();
    }
 
    async getPost(postId) {
@@ -28,11 +24,7 @@ class PostsService {
    }
 
    async getPostComments(postId) {
-      const comments = await Comment.find({ post_id: postId }).exec();
-
-      if (comments.length === 0) {
-         throw new AppError("No comments were found for this post", 404);
-      }
+      return await Comment.find({ post_id: postId }).exec();
    }
 
    async createPost(authorId, title, text, isPublished) {
@@ -54,7 +46,7 @@ class PostsService {
       const post = await findById(postId).exec();
 
       if (post === null) {
-         throw new AppError("Invalid resource identifier");
+         throw new AppError("Post not found", 404);
       }
 
       const updatedPost = {
@@ -71,7 +63,7 @@ class PostsService {
       const post = await findById(postId).exec();
 
       if (post === null) {
-         throw new AppError("Invalid resource identifier");
+         throw new AppError("Post not found", 404);
       }
 
       await Post.findByIdAndDelete(postId).exec();
