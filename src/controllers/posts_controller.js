@@ -39,7 +39,7 @@ const updatePost = [
       const { author_id, title, text, is_published } = req.body;
       await PostsService.updatePost(author_id, title, text, is_published, post_id);
    }),
-   res.sendStatus(200),
+   res.sendStatus(204),
 ];
 
 const deletePost = asyncHandler(async (req, res, next) => {
