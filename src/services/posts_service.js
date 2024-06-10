@@ -7,7 +7,15 @@ class PostsService {
    }
 
    async getPost(postId) {
-      return await Post.findById().populate("author").exec();
+      const [post, comments] = await Promise.all([
+         Post.findById().populate("author").exec(),
+         Comment.find({ post_id: postId }).populate("author").exec(),
+      ]);
+
+      return {
+         post,
+         comments,
+      };
    }
 
    async getPostComments(postId) {
