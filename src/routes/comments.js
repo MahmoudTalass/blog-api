@@ -1,24 +1,30 @@
 const express = require("express");
 const router = express.Router();
+const commentsController = require("../controllers/comments_controller");
 
 /**
- * Endpoint to retrieve all comments
+ * retrieve all posts
  */
-router.get("/");
+router.get("/", commentsController.getAllComments);
 
 /**
- * Endpoint to create a new comment
+ * retrieve a particular post
  */
-router.post("/");
+router.get("/:commentId", commentsController.getComment);
 
 /**
- * Endpoint to update a particular comment
+ * create a new post
  */
-router.put("/:commentId");
+router.post("/", commentsController.createComment);
 
 /**
- * Endpoint to delete a particular comment
+ * update a particular post
  */
-router.delete("/:commentId");
+router.put("/:commentId", commentsController.updateComment);
+
+/**
+ * delete a particular post
+ */
+router.delete("/:commentId", commentsController.deleteComment);
 
 module.exports = router;
