@@ -9,15 +9,4 @@ const UserSchema = new Schema({
    is_author: { type: Boolean, required: true },
 });
 
-UserSchema.pre("save", async function (next) {
-   try {
-      const hash = await bcrypt.hash(this.password, 10);
-      this.password = hash;
-
-      next();
-   } catch (err) {
-      next(err);
-   }
-});
-
 module.exports = mongoose.model("User", UserSchema);
