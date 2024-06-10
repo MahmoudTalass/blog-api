@@ -15,7 +15,7 @@ PostSchema.virtual("timestamp_formatted").get(function () {
 });
 
 PostSchema.virtual("publish_date_formatted").get(function () {
-   return this.publish_date.toLocaleTimeString();
+   return this.publish_date.toLocaleString();
 });
 
 module.exports = mongoose.model("Post", PostSchema);
