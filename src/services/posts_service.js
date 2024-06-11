@@ -10,7 +10,7 @@ class PostsService {
    async getPost(postId) {
       const [post, comments] = await Promise.all([
          Post.findById().populate("author").exec(),
-         Comment.find({ post_id: postId }).populate("author").exec(),
+         Comment.find({ postId: postId }).populate("author").exec(),
       ]);
 
       if (post === null) {
@@ -24,7 +24,7 @@ class PostsService {
    }
 
    async getPostComments(postId) {
-      return await Comment.find({ post_id: postId }).exec();
+      return await Comment.find({ postId: postId }).exec();
    }
 
    async createPost(authorId, title, text, isPublished) {
@@ -32,11 +32,11 @@ class PostsService {
          author: authorId,
          title,
          text,
-         is_published: isPublished,
+         isPublished: isPublished,
       });
 
       if (isPublished === true) {
-         post.publish_date = Date.now();
+         post.publishDate = Date.now();
       }
 
       await post.save();
@@ -53,7 +53,7 @@ class PostsService {
          author: authorId,
          title,
          text,
-         is_published: isPublished,
+         isPublished: isPublished,
       };
 
       await Post.findByIdAndUpdate(postId, { $set: updatedPost }, { runValidators: true }).exec();

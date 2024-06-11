@@ -1,6 +1,6 @@
 const PostsService = require("../services/posts_service");
 const asyncHandler = require("express-async-handler");
-const validatePost = require("../middlewares/validation");
+const { validatePost } = require("../middlewares/validation");
 
 const getAllPosts = asyncHandler(async (req, res, next) => {
    const posts = await PostsService.getAllPosts();
@@ -9,15 +9,15 @@ const getAllPosts = asyncHandler(async (req, res, next) => {
 });
 
 const getPost = asyncHandler(async (req, res, next) => {
-   const { post_id } = req.params;
-   const post = await PostsService.getPost(post_id);
+   const { postId } = req.params;
+   const post = await PostsService.getPost(postId);
 
    res.json(post);
 });
 
 const getPostComments = asyncHandler(async (req, res, next) => {
-   const { post_id } = req.params;
-   const comments = await PostsService.getPostComments(post_id);
+   const { postId } = req.params;
+   const comments = await PostsService.getPostComments(postId);
 
    res.json(comments);
 });
@@ -25,8 +25,8 @@ const getPostComments = asyncHandler(async (req, res, next) => {
 const createPost = [
    ...validatePost,
    asyncHandler(async (req, res, next) => {
-      const { author_id, title, text, is_published } = req.body;
-      await PostsService.createPost(author_id, title, text, is_published);
+      const { authorId, title, text, isPublished } = req.body;
+      await PostsService.createPost(authorId, title, text, isPublished);
 
       res.sendStatus(201);
    }),
@@ -35,16 +35,19 @@ const createPost = [
 const updatePost = [
    validatePost,
    asyncHandler(async (req, res, next) => {
-      const { post_id } = req.params;
-      const { author_id, title, text, is_published } = req.body;
-      await PostsService.updatePost(author_id, title, text, is_published, post_id);
+      const { postId } = req.params;
+      const { authorId, title, text, isPublished } = req.body;
+      await PostsService.updatePost(authorId, title, text, isPublished, postId);
+
+      res.sendStatus(204);
    }),
-   res.sendStatus(204),
 ];
 
 const deletePost = asyncHandler(async (req, res, next) => {
-   const { post_id } = req.params;
-   await PostsService.deletePost(post_id);
+   const { postId } = req.params;
+   console.log(postId);
+   console.log(req.params);
+   await PostsService.deletePost(postId);
 
    res.sendStatus(204);
 });

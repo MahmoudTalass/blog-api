@@ -20,7 +20,7 @@ class CommentsService {
       const comment = new Comment({
          author: authorId,
          text,
-         post_id: postId,
+         postId: postId,
       });
 
       await comment.save();
@@ -36,7 +36,7 @@ class CommentsService {
       const updatedComment = {
          author: authorId,
          text,
-         post_id: postId,
+         postId: postId,
       };
 
       await Comment.findByIdAndUpdate(

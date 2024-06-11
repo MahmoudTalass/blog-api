@@ -8,30 +8,30 @@ const getAllComments = asyncHandler(async (req, res, next) => {
 });
 
 const getComment = asyncHandler(async (req, res, next) => {
-   const { comment_id } = req.params;
-   const comment = await CommentsService.getComment(comment_id);
+   const { commentId } = req.params;
+   const comment = await CommentsService.getComment(commentId);
 
    res.json(comment);
 });
 
 const createComment = asyncHandler(async (req, res, next) => {
-   const { author_id, text, post_id } = req.body;
+   const { authorId, text, postId } = req.body;
    await CommentsService.createComment();
 
    res.sendStatus(201);
 });
 
 const updateComment = asyncHandler(async (req, res, next) => {
-   const { comment_id } = req.params;
-   const { author_id, text, post_id } = req.body;
-   await CommentsService.updateComment(author_id, text, post_id, comment_id);
+   const { commentId } = req.params;
+   const { authorId, text, postId } = req.body;
+   await CommentsService.updateComment(authorId, text, postId, commentId);
 
    res.sendStatus(204);
 });
 
 const deleteComment = asyncHandler(async (req, res, next) => {
-   const { comment_id } = req.params;
-   await CommentsService.deleteComment(comment_id);
+   const { commentId } = req.params;
+   await CommentsService.deleteComment(commentId);
 
    res.sendStatus(204);
 });

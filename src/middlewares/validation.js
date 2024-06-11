@@ -4,7 +4,7 @@ const ValidationError = require("../utils/app_error").ValidationError;
 const validatePost = [
    body("title", "Must provide a title").trim().notEmpty().escape(),
    body("text", "Must provide a body text").trim().notEmpty(),
-   body("is_published", "Must specify if you would like the post to be published").customSanitizer(
+   body("isPublished", "Must specify if you would like the post to be published").customSanitizer(
       (value) => {
          if (value === "yes") return true;
          return false;

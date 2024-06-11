@@ -5,10 +5,10 @@ const CommentSchema = new Schema({
    author: { type: Schema.Types.ObjectId, required: true, ref: "User" },
    text: { type: String, required: true },
    timestamp: { type: Date, default: Date.now },
-   post_id: { type: Schema.Types.ObjectId, required: true },
+   postId: { type: Schema.Types.ObjectId, required: true },
 });
 
-CommentSchema.virtual("timestamp_formatted").get(function () {
+CommentSchema.virtual("timestampFormatted").get(function () {
    return this.timestamp.toLocaleString();
 });
 
