@@ -12,4 +12,4 @@ class ValidationError extends AppError {
    }
 }
 
-module.exports = { AppError, ValidationError, InternalServerError };
+module.exports = { AppError, ValidationError };
