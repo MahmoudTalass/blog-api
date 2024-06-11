@@ -6,7 +6,7 @@ const cors = require("cors");
 require("dotenv").config();
 require("./src/configs/db.config");
 
-const indexRouter = require("./routes/index");
+const indexRouter = require("./src/routes/index");
 
 const app = express();
 
@@ -15,11 +15,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 
 app.use("/api", indexRouter);
-
-// catch 404 and forward to error handler
-app.use(function (req, res, next) {
-   next(createError(404));
-});
 
 // error handler
 app.use(errorHandler);
