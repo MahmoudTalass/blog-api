@@ -1,10 +1,10 @@
 const Post = require("../models/post");
 const Comment = require("../models/comment");
-const AppError = require("../utils/app_error");
+const AppError = require("../utils/app_error").AppError;
 
 class PostsService {
    async getAllPosts() {
-      await Post.find().populate("author").exec();
+      return await Post.find({}).populate("author").exec();
    }
 
    async getPost(postId) {
