@@ -3,7 +3,7 @@
    "version": "0.0.0",
    "private": true,
    "scripts": {
-      "start": "DEBUG=blog-api:* npm start",
+      "start": "DEBUG=blog-api:* node ./bin/www",
       "devStart": "nodemon ./bin/www",
       "serverStart": "DEBUG=blog-api:* npm run devStart"
    },
