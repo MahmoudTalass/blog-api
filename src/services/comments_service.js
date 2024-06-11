@@ -1,5 +1,5 @@
 const Comment = require("../models/comment");
-const AppError = require("../utils/app_error");
+const AppError = require("../utils/app_error").AppError;
 
 class CommentsService {
    async getAllComments() {
