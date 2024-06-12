@@ -34,13 +34,16 @@ const jwtStrategyOptions = {
 };
 
 const jwtStrategy = new JwtStrategy(jwtStrategyOptions, async (jwtPayload, done) => {
-   const user = await User.findById(jwtPayload.id);
+   try {
+      const user = await User.findById(jwtPayload.id);
+      if (!user) {
+         throw new AppError("User not found", 404);
+      }
 
-   if (!user) {
-      throw new AppError("User not found", 404);
+      done(null, user);
+   } catch (error) {
+      done(error);
    }
-
-   done(null, user);
 });
 
 passport.use(localStrategy);
