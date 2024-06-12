@@ -17,13 +17,8 @@ const checkNotAuthenticated = asyncHandler((req, res, next) => {
    if (token === null) {
       return next();
    }
-   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-      if (err) {
-         return next();
-      }
 
-      throw new AppError("You are already logged in", 403);
-   });
+   throw new AppError("You are already logged in", 403);
 });
 
 module.exports = {
