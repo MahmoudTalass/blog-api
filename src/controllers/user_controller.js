@@ -12,7 +12,7 @@ const getCurrentUserInfo = (req, res, next) => {
 };
 
 const getCurrentUserPosts = asyncHandler(async (req, res, next) => {
-   return await UserService.getUserPosts(req.user.id);
+   return await UserService.getCurrentUserPosts(req.user.id);
 });
 
 const getCurrentUserComments = asyncHandler(async (req, res, next) => {
