@@ -46,7 +46,7 @@ const validateSignup = [
    body("isAuthor")
       .trim()
       .customSanitizer((value) => {
-         return value === true ? true : false;
+         return value === "true" ? true : false;
       })
       .escape(),
    (req, res, next) => {
