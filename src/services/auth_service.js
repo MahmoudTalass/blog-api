@@ -5,14 +5,8 @@ const AppError = require("../utils/app_error");
 
 class AuthService {
    async signup(name, email, password, isAuthor) {
-      const user = await User.findOne({ email }).exec();
-
-      if (user) {
-         throw new AppError("User with this email already exists", 409);
-      }
-
       const hash = await bcrypt.hash(password, salt);
-      const newUser = new User({
+      const user = new User({
          name,
          email,
          password: hash,
