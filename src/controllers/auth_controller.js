@@ -11,7 +11,7 @@ const signup = [
       const user = await AuthService.signup(name, email, password, isAuthor);
       const token = AuthService.createToken(user);
 
-      res.sendStatus(201).json({ user, token });
+      res.status(201).json({ user, token });
    }),
 ];
 
