@@ -5,7 +5,7 @@ const AppError = require("../utils/app_error");
 
 class AuthService {
    async signup(name, email, password, isAuthor) {
-      const hash = await bcrypt.hash(password, salt);
+      const hash = await bcrypt.hash(password, 10);
       const user = new User({
          name,
          email,
