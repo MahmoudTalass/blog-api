@@ -6,12 +6,9 @@ const ValidationError = require("../utils/app_error").ValidationError;
 const validatePost = [
    body("title", "Must provide a title").trim().notEmpty().escape(),
    body("text", "Must provide a body text").trim().notEmpty(),
-   body("isPublished", "Must specify if you would like the post to be published").customSanitizer(
-      (value) => {
-         if (value === "yes") return true;
-         return false;
-      }
-   ),
+   body("isPublished").customSanitizer((value) => {
+      return value === true ? true : false;
+   }),
    (req, res, next) => {
       const errors = validationResult(req);
 
@@ -47,9 +44,9 @@ const validateSignup = [
       .withMessage("Password must contain at least 8 characters")
       .escape(),
    body("isAuthor")
+      .trim()
       .customSanitizer((value) => {
-         if (value === "yes") return true;
-         return false;
+         return value === true ? true : false;
       })
       .escape(),
    (res, req, next) => {
