@@ -45,8 +45,6 @@ const updatePost = [
 
 const deletePost = asyncHandler(async (req, res, next) => {
    const { postId } = req.params;
-   console.log(postId);
-   console.log(req.params);
    await PostsService.deletePost(postId);
 
    res.sendStatus(204);
