@@ -7,8 +7,8 @@ const JwtStrategy = require("passport-jwt").Strategy;
 const Extractor = require("passport-jwt").ExtractJwt;
 
 const localStrategyOpt = {
-   usernameField: email,
-   passwordField: password,
+   usernameField: "email",
+   passwordField: "password",
    session: false,
 };
 
