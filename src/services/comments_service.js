@@ -26,7 +26,7 @@ class CommentsService {
       await comment.save();
    }
 
-   async updateComment(authorId, text, postId, commentId) {
+   async updateComment(text, postId, commentId) {
       const comment = await Comment.findById(commentId).exec();
 
       if (comment === null) {
@@ -34,7 +34,6 @@ class CommentsService {
       }
 
       const updatedComment = {
-         author: authorId,
          text,
          postId: postId,
       };

@@ -32,7 +32,7 @@ class PostsService {
          author: authorId,
          title,
          text,
-         isPublished: isPublished,
+         isPublished,
       });
 
       if (isPublished === true) {
@@ -42,7 +42,7 @@ class PostsService {
       await post.save();
    }
 
-   async updatePost(authorId, title, text, isPublished, postId) {
+   async updatePost(title, text, isPublished, postId) {
       const post = await Post.findById(postId).exec();
 
       if (post === null) {
@@ -50,10 +50,9 @@ class PostsService {
       }
 
       const updatedPost = {
-         author: authorId,
          title,
          text,
-         isPublished: isPublished,
+         isPublished,
       };
 
       await Post.findByIdAndUpdate(postId, { $set: updatedPost }, { runValidators: true }).exec();
