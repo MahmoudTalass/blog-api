@@ -4,7 +4,7 @@ const AppError = require("../utils/app_error").AppError;
 
 class PostsService {
    async getAllPosts() {
-      return await Post.find({}).populate("author").exec();
+      return await Post.find({ isPublished: false }).populate("author").exec();
    }
 
    async getPost(postId) {
@@ -65,7 +65,14 @@ class PostsService {
          throw new AppError("Post not found", 404);
       }
 
-      await Post.findByIdAndDelete(postId).exec();
+      const session = await Post.startSession();
+      session.startTransaction();
+
+      await Post.findByIdAndDelete(postId, { session }).exec();
+      await Comment.deleteMany({ postId }, { session }).exec();
+
+      await session.commitTransaction();
+      await session.endSession();
    }
 }
 
