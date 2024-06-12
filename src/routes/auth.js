@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
+const authController = require("../controllers/auth_controller");
+const { checkNotAuthenticated } = require("../middlewares/auth");
 
-router.get("/login");
+router.get("/signup", checkNotAuthenticated, authController.signup);
 
-router.get("/logout");
-
-router.get("/sign-up");
+router.get("/login", checkNotAuthenticated, authController.login);
 
 module.exports = router;
