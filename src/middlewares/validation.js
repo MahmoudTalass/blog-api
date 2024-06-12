@@ -49,7 +49,7 @@ const validateSignup = [
          return value === true ? true : false;
       })
       .escape(),
-   (res, req, next) => {
+   (req, res, next) => {
       const errors = validationResult(req);
 
       if (!errors.isEmpty()) {
