@@ -13,7 +13,7 @@ class AuthService {
          isAuthor,
       });
 
-      return await newUser.save();
+      return await user.save();
    }
 
    createToken(user) {
