@@ -7,7 +7,7 @@ const validatePost = [
    body("title", "Must provide a title").trim().notEmpty().escape(),
    body("text", "Must provide a body text").trim().notEmpty(),
    body("isPublished").customSanitizer((value) => {
-      return value === true ? true : false;
+      return value === "true" ? true : false;
    }),
    (req, res, next) => {
       const errors = validationResult(req);
