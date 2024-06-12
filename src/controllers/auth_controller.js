@@ -19,8 +19,12 @@ const login = [
    ...validateLogin,
    asyncHandler(async (req, res, next) => {
       passport.authenticate("local", { session: false }, function (err, user, info, status) {
-         if (err || !user) {
+         if (err) {
             return next(new AppError("Failed to authenticate", 401));
+         }
+
+         if (!user) {
+            return next(new AppError(info.message, 401));
          }
 
          const token = AuthService.createToken(user);
