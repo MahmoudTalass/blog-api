@@ -17,15 +17,14 @@ class AuthService {
    }
 
    createToken(user) {
-      const oneWeek = 60 * 60 * 60 * 24 * 7;
-
       const payload = {
          id: user.id,
-         exp: oneWeek,
          author: user.isAuthor,
       };
 
-      const token = jwt.sign(payload, process.env.JWT_SECRET);
+      const token = jwt.sign(payload, process.env.JWT_SECRET, {
+         expiresIn: "7d",
+      });
 
       return token;
    }
