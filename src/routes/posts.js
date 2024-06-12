@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const postsController = require("../controllers/posts_controller");
 const passport = require("passport");
+const { isAuthor } = require("../middlewares/auth");
 
 /**
  * retrieve all posts
@@ -21,7 +22,12 @@ router.get("/:postId/comments", postsController.getPostComments);
 /**
  * create a new post
  */
-router.post("/", passport.authenticate("jwt", { session: false }), postsController.createPost);
+router.post(
+   "/",
+   passport.authenticate("jwt", { session: false }),
+   isAuthor,
+   postsController.createPost
+);
 
 /**
  * update a particular post
@@ -29,6 +35,7 @@ router.post("/", passport.authenticate("jwt", { session: false }), postsControll
 router.put(
    "/:postId",
    passport.authenticate("jwt", { session: false }),
+   isAuthor,
    postsController.updatePost
 );
 
@@ -38,6 +45,7 @@ router.put(
 router.delete(
    "/:postId",
    passport.authenticate("jwt", { session: false }),
+   isAuthor,
    postsController.deletePost
 );
 
