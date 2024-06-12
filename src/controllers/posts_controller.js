@@ -25,7 +25,8 @@ const getPostComments = asyncHandler(async (req, res, next) => {
 const createPost = [
    ...validatePost,
    asyncHandler(async (req, res, next) => {
-      const { authorId, title, text, isPublished } = req.body;
+      const authorId = req.user.id;
+      const { title, text, isPublished } = req.body;
       await PostsService.createPost(authorId, title, text, isPublished);
 
       res.sendStatus(201);
@@ -35,8 +36,9 @@ const createPost = [
 const updatePost = [
    validatePost,
    asyncHandler(async (req, res, next) => {
+      const authorId = req.user.id;
       const { postId } = req.params;
-      const { authorId, title, text, isPublished } = req.body;
+      const { title, text, isPublished } = req.body;
       await PostsService.updatePost(authorId, title, text, isPublished, postId);
 
       res.sendStatus(204);

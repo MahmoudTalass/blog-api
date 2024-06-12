@@ -15,15 +15,17 @@ const getComment = asyncHandler(async (req, res, next) => {
 });
 
 const createComment = asyncHandler(async (req, res, next) => {
-   const { authorId, text, postId } = req.body;
-   await CommentsService.createComment();
+   const authorId = req.user.id;
+   const { text, postId } = req.body;
+   await CommentsService.createComment(authorId, text, postId);
 
    res.sendStatus(201);
 });
 
 const updateComment = asyncHandler(async (req, res, next) => {
+   const authorId = req.user.id;
    const { commentId } = req.params;
-   const { authorId, text, postId } = req.body;
+   const { text, postId } = req.body;
    await CommentsService.updateComment(authorId, text, postId, commentId);
 
    res.sendStatus(204);
