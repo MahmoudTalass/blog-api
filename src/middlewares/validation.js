@@ -3,9 +3,25 @@ const User = require("../models/user");
 const { AppError } = require("../utils/app_error");
 const ValidationError = require("../utils/app_error").ValidationError;
 
+const validateComment = [
+   body("text", "Must provide text").trim().notEmpty().escape(),
+   (req, res, next) => {
+      const errors = validationResult(req);
+
+      if (!errors.isEmpty()) {
+         const error = errors.array().map((err) => {
+            return { message: err.msg };
+         });
+         return next(new ValidationError(error));
+      }
+
+      next();
+   },
+];
+
 const validatePost = [
    body("title", "Must provide a title").trim().notEmpty().escape(),
-   body("text", "Must provide a body text").trim().notEmpty(),
+   body("text", "Must provide text").trim().notEmpty().escape(),
    body("isPublished").customSanitizer((value) => {
       return value === "true" ? true : false;
    }),
