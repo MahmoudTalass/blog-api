@@ -48,7 +48,8 @@ const updatePost = [
 
 const deletePost = asyncHandler(async (req, res, next) => {
    const currentUserId = req.user.id;
-   const { authorId, postId } = req.params;
+   const { authorId } = req.body;
+   const { postId } = req.params;
    await PostsService.deletePost(currentUserId, authorId, postId);
 
    res.sendStatus(204);
