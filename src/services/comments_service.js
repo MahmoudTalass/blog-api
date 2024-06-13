@@ -3,7 +3,7 @@ const AppError = require("../utils/app_error").AppError;
 
 class CommentsService {
    async getAllComments() {
-      await Comment.find().populate("author", "name email isAuthor").exec();
+      return await Comment.find().populate("author", "name email isAuthor").exec();
    }
 
    async getComment(commentId) {
