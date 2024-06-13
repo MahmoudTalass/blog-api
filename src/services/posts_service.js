@@ -4,14 +4,14 @@ const AppError = require("../utils/app_error").AppError;
 
 class PostsService {
    async getAllPosts() {
-      return await Post.find({ isPublished: false })
+      return await Post.find({ isPublished: true })
          .populate("author", "name email isAuthor")
          .exec();
    }
 
    async getPost(postId) {
       const [post, comments] = await Promise.all([
-         Post.findById(postId).populate("author", "name email isAuthor").exec(),
+         Post.find({ postId, isPublished: true }).populate("author", "name email isAuthor").exec(),
          Comment.find({ postId: postId }).populate("author", "name email isAuthor").exec(),
       ]);
 
