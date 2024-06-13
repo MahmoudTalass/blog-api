@@ -42,11 +42,15 @@ class PostsService {
       await post.save();
    }
 
-   async updatePost(title, text, isPublished, postId) {
+   async updatePost(currentUserId, authorId, title, text, isPublished, postId) {
       const post = await Post.findById(postId).exec();
 
       if (post === null) {
          throw new AppError("Post not found", 404);
+      }
+
+      if (currentUserId !== authorId) {
+         throw new AppError("You do not have the permission to update this post", 403);
       }
 
       const updatedPost = {
@@ -58,11 +62,15 @@ class PostsService {
       await Post.findByIdAndUpdate(postId, { $set: updatedPost }, { runValidators: true }).exec();
    }
 
-   async deletePost(postId) {
+   async deletePost(currentUserId, authorId, postId) {
       const post = await Post.findById(postId).exec();
 
       if (post === null) {
          throw new AppError("Post not found", 404);
+      }
+
+      if (currentUserId !== authorId) {
+         throw new AppError("You do not have the permission to delete this post", 403);
       }
 
       const session = await Post.startSession();

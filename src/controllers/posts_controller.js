@@ -36,18 +36,20 @@ const createPost = [
 const updatePost = [
    validatePost,
    asyncHandler(async (req, res, next) => {
-      const authorId = req.user.id;
+      const currentUserId = req.user.id;
       const { postId } = req.params;
-      const { title, text, isPublished } = req.body;
-      await PostsService.updatePost(authorId, title, text, isPublished, postId);
+      const { authorId, title, text, isPublished } = req.body;
+
+      await PostsService.updatePost(currentUserId, authorId, title, text, isPublished, postId);
 
       res.sendStatus(204);
    }),
 ];
 
 const deletePost = asyncHandler(async (req, res, next) => {
-   const { postId } = req.params;
-   await PostsService.deletePost(postId);
+   const currentUserId = req.user.id;
+   const { authorId, postId } = req.params;
+   await PostsService.deletePost(currentUserId, authorId, postId);
 
    res.sendStatus(204);
 });
