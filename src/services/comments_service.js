@@ -3,11 +3,13 @@ const AppError = require("../utils/app_error").AppError;
 
 class CommentsService {
    async getAllComments() {
-      await Comment.find().populate("author").exec();
+      await Comment.find().populate("author", "name email isAuthor").exec();
    }
 
    async getComment(commentId) {
-      const comment = await Comment.findById(commentId);
+      const comment = await Comment.findById(commentId)
+         .populate("author", "name email isAuthor")
+         .exec();
 
       if (comment === null) {
          throw new AppError("Comment not found", 404);

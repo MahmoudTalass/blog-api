@@ -4,13 +4,15 @@ const AppError = require("../utils/app_error").AppError;
 
 class PostsService {
    async getAllPosts() {
-      return await Post.find({ isPublished: false }).populate("author").exec();
+      return await Post.find({ isPublished: false })
+         .populate("author", "name email isAuthor")
+         .exec();
    }
 
    async getPost(postId) {
       const [post, comments] = await Promise.all([
-         Post.findById().populate("author").exec(),
-         Comment.find({ postId: postId }).populate("author").exec(),
+         Post.findById().populate("author", "name email isAuthor").exec(),
+         Comment.find({ postId: postId }).populate("author", "name email isAuthor").exec(),
       ]);
 
       if (post === null) {
@@ -24,7 +26,9 @@ class PostsService {
    }
 
    async getPostComments(postId) {
-      return await Comment.find({ postId: postId }).exec();
+      return await Comment.find({ postId: postId })
+         .populate("author", "name email isAuthor")
+         .exec();
    }
 
    async createPost(authorId, title, text, isPublished) {
