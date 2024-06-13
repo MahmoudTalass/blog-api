@@ -23,17 +23,20 @@ const createComment = asyncHandler(async (req, res, next) => {
 });
 
 const updateComment = asyncHandler(async (req, res, next) => {
-   const authorId = req.user.id;
+   const currentUserId = req.user.id;
    const { commentId } = req.params;
-   const { text, postId } = req.body;
-   await CommentsService.updateComment(authorId, text, postId, commentId);
+   const { authorId, text, postId } = req.body;
+   await CommentsService.updateComment(currentUserId, authorId, text, postId, commentId);
 
    res.sendStatus(204);
 });
 
 const deleteComment = asyncHandler(async (req, res, next) => {
+   const currentUserId = req.user.id;
    const { commentId } = req.params;
-   await CommentsService.deleteComment(commentId);
+   const { authorId } = req.body;
+
+   await CommentsService.deleteComment(currentUserId, authorId, commentId);
 
    res.sendStatus(204);
 });

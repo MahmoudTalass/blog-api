@@ -26,11 +26,15 @@ class CommentsService {
       await comment.save();
    }
 
-   async updateComment(text, postId, commentId) {
+   async updateComment(currentUserId, authorId, text, postId, commentId) {
       const comment = await Comment.findById(commentId).exec();
 
       if (comment === null) {
          throw new AppError("Comment not found", 404);
+      }
+
+      if (currentUserId !== authorId) {
+         throw new AppError("You do not have the permission to update this comment", 403);
       }
 
       const updatedComment = {
@@ -45,11 +49,15 @@ class CommentsService {
       ).exec();
    }
 
-   async deleteComment(commentId) {
+   async deleteComment(currentUserId, authorId, commentId) {
       const comment = await Comment.findById(commentId).exec();
 
       if (comment === null) {
          throw new AppError("Comment not found", 404);
+      }
+
+      if (currentUserId !== authorId) {
+         throw new AppError("You do not have the permission to update this comment", 403);
       }
 
       await Post.findByIdAndDelete(commentId).exec();
