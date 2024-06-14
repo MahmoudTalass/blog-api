@@ -2,7 +2,7 @@ const { body, validationResult } = require("express-validator");
 const User = require("../models/user");
 const { AppError } = require("../utils/app_error");
 const ValidationError = require("../utils/app_error").ValidationError;
-const isValidObjectId = require("mongoose").isValidObjectId;
+const isValid = require("mongoose").Types.ObjectId.isValid;
 
 const validateComment = [
    body("text", "Must provide text").trim().notEmpty().escape(),
@@ -16,7 +16,7 @@ const validateComment = [
          return next(new ValidationError(error));
       }
 
-      if (!isValidObjectId(req.body.author) || !isValidObjectId(req.body.postId)) {
+      if (!isValid(req.body.author) || !isValid(req.body.postId)) {
          return next(new AppError("Invalid object id", 400));
       }
 
@@ -40,7 +40,7 @@ const validatePost = [
          return next(new ValidationError(error));
       }
 
-      if (!isValidObjectId(req.body.author)) {
+      if (!isValid(req.body.author)) {
          return next(new AppError("Invalid object id", 400));
       }
 
@@ -116,6 +116,7 @@ const validateLogin = [
 
 module.exports = {
    validatePost,
+   validateComment,
    validateSignup,
    validateLogin,
 };
