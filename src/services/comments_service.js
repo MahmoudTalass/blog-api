@@ -30,7 +30,7 @@ class CommentsService {
          postId: postId,
       });
 
-      await comment.save();
+      return await comment.save();
    }
 
    async updateComment(currentUserId, authorId, text, postId, commentId) {
@@ -50,12 +50,14 @@ class CommentsService {
       const comment = await Comment.findByIdAndUpdate(
          commentId,
          { $set: updatedComment },
-         { runValidators: true }
+         { runValidators: true, new: true }
       ).exec();
 
       if (comment === null) {
          throw new AppError("Comment not found", 404);
       }
+
+      return comment;
    }
 
    async deleteComment(currentUserId, authorId, commentId) {

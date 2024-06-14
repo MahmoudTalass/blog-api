@@ -27,9 +27,9 @@ const createPost = [
    asyncHandler(async (req, res, next) => {
       const authorId = req.user.id;
       const { title, text, isPublished } = req.body;
-      await PostsService.createPost(authorId, title, text, isPublished);
+      const post = await PostsService.createPost(authorId, title, text, isPublished);
 
-      res.sendStatus(201);
+      res.status(201).json(post);
    }),
 ];
 
@@ -40,9 +40,16 @@ const updatePost = [
       const { postId } = req.params;
       const { authorId, title, text, isPublished } = req.body;
 
-      await PostsService.updatePost(currentUserId, authorId, title, text, isPublished, postId);
+      const post = await PostsService.updatePost(
+         currentUserId,
+         authorId,
+         title,
+         text,
+         isPublished,
+         postId
+      );
 
-      res.sendStatus(204);
+      res.json(post);
    }),
 ];
 

@@ -52,7 +52,7 @@ class PostsService {
          post.publishDate = Date.now();
       }
 
-      await post.save();
+      return await post.save();
    }
 
    async updatePost(currentUserId, authorId, title, text, isPublished, postId) {
@@ -73,12 +73,14 @@ class PostsService {
       const post = await Post.findByIdAndUpdate(
          postId,
          { $set: updatedPost },
-         { runValidators: true }
+         { runValidators: true, new: true }
       ).exec();
 
       if (post === null) {
          throw new AppError("Post not found", 404);
       }
+
+      return post;
    }
 
    async deletePost(currentUserId, authorId, postId) {
