@@ -4,7 +4,10 @@ const isValid = require("mongoose").Types.ObjectId.isValid;
 
 class CommentsService {
    async getAllComments() {
-      return await Comment.find().populate("author", "name email isAuthor").exec();
+      return await Comment.find({})
+         .populate("author", "name email isAuthor")
+         .sort({ createdAt: -1 })
+         .exec();
    }
 
    async getComment(commentId) {

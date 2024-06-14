@@ -7,6 +7,7 @@ class PostsService {
    async getAllPosts() {
       return await Post.find({ isPublished: true })
          .populate("author", "name email isAuthor")
+         .sort({ createdAt: -1 })
          .exec();
    }
 
@@ -17,7 +18,10 @@ class PostsService {
 
       const [post, comments] = await Promise.all([
          Post.find({ postId, isPublished: true }).populate("author", "name email isAuthor").exec(),
-         Comment.find({ postId: postId }).populate("author", "name email isAuthor").exec(),
+         Comment.find({ postId: postId })
+            .populate("author", "name email isAuthor")
+            .sort({ createdAt: -1 })
+            .exec(),
       ]);
 
       if (post === null) {
@@ -37,6 +41,7 @@ class PostsService {
 
       return await Comment.find({ postId: postId })
          .populate("author", "name email isAuthor")
+         .sort({ createdAt: -1 })
          .exec();
    }
 
