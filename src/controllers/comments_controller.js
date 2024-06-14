@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const CommentsService = require("../services/comments_service");
+const { validateComment } = require("../middlewares/validation");
 
 const getAllComments = asyncHandler(async (req, res, next) => {
    const comments = await CommentsService.getAllComments();
@@ -14,28 +15,34 @@ const getComment = asyncHandler(async (req, res, next) => {
    res.json(comment);
 });
 
-const createComment = asyncHandler(async (req, res, next) => {
-   const authorId = req.user.id;
-   const { text, postId } = req.body;
-   const comment = await CommentsService.createComment(authorId, text, postId);
+const createComment = [
+   ...validateComment,
+   asyncHandler(async (req, res, next) => {
+      const authorId = req.user.id;
+      const { text, postId } = req.body;
+      const comment = await CommentsService.createComment(authorId, text, postId);
 
-   res.status(201).json(comment);
-});
+      res.status(201).json(comment);
+   }),
+];
 
-const updateComment = asyncHandler(async (req, res, next) => {
-   const currentUserId = req.user.id;
-   const { commentId } = req.params;
-   const { authorId, text, postId } = req.body;
-   const comment = await CommentsService.updateComment(
-      currentUserId,
-      authorId,
-      text,
-      postId,
-      commentId
-   );
+const updateComment = [
+   ...validateComment,
+   asyncHandler(async (req, res, next) => {
+      const currentUserId = req.user.id;
+      const { commentId } = req.params;
+      const { authorId, text, postId } = req.body;
+      const comment = await CommentsService.updateComment(
+         currentUserId,
+         authorId,
+         text,
+         postId,
+         commentId
+      );
 
-   res.json(comment);
-});
+      res.json(comment);
+   }),
+];
 
 const deleteComment = asyncHandler(async (req, res, next) => {
    const currentUserId = req.user.id;
