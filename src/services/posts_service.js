@@ -7,7 +7,7 @@ class PostsService {
    async getAllPosts() {
       return await Post.find({ isPublished: true })
          .populate("author", "name email isAuthor")
-         .sort({ createdAt: -1 })
+         .sort({ createdAt: -1, _id: 1 })
          .exec();
    }
 
@@ -20,7 +20,7 @@ class PostsService {
          Post.find({ postId, isPublished: true }).populate("author", "name email isAuthor").exec(),
          Comment.find({ postId: postId })
             .populate("author", "name email isAuthor")
-            .sort({ createdAt: -1 })
+            .sort({ createdAt: -1, _id: 1 })
             .exec(),
       ]);
 
@@ -41,7 +41,7 @@ class PostsService {
 
       return await Comment.find({ postId: postId })
          .populate("author", "name email isAuthor")
-         .sort({ createdAt: -1 })
+         .sort({ createdAt: -1, _id: 1 })
          .exec();
    }
 
