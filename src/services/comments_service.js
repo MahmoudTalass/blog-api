@@ -1,5 +1,6 @@
 const Comment = require("../models/comment");
 const AppError = require("../utils/app_error").AppError;
+const isValid = require("mongoose").Types.ObjectId.isValid;
 
 class CommentsService {
    async getAllComments() {
@@ -7,6 +8,10 @@ class CommentsService {
    }
 
    async getComment(commentId) {
+      if (!isValid(commentId)) {
+         throw new AppError("Comment not found", 404);
+      }
+
       const comment = await Comment.findById(commentId)
          .populate("author", "name email isAuthor")
          .exec();
@@ -29,9 +34,7 @@ class CommentsService {
    }
 
    async updateComment(currentUserId, authorId, text, postId, commentId) {
-      const comment = await Comment.findById(commentId).exec();
-
-      if (comment === null) {
+      if (!isValid(commentId)) {
          throw new AppError("Comment not found", 404);
       }
 
@@ -44,25 +47,30 @@ class CommentsService {
          postId: postId,
       };
 
-      await Comment.findByIdAndUpdate(
+      const comment = await Comment.findByIdAndUpdate(
          commentId,
          { $set: updatedComment },
          { runValidators: true }
       ).exec();
-   }
-
-   async deleteComment(currentUserId, authorId, commentId) {
-      const comment = await Comment.findById(commentId).exec();
 
       if (comment === null) {
          throw new AppError("Comment not found", 404);
       }
+   }
 
-      if (currentUserId !== authorId) {
-         throw new AppError("You do not have the permission to delete this comment", 403);
+   async deleteComment(currentUserId, authorId, commentId) {
+      if (!isValid(commentId)) {
+         throw new AppError("Comment not found", 404);
       }
 
-      await Post.findByIdAndDelete(commentId).exec();
+      if (currentUserId !== authorId) {
+         throw new AppError("You do not have the permission to update this comment", 403);
+      }
+      const comment = await Post.findByIdAndDelete(commentId).exec();
+
+      if (comment === null) {
+         throw new AppError("Comment not found", 404);
+      }
    }
 }
 
