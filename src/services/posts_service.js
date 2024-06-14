@@ -75,11 +75,10 @@ class PostsService {
          isPublished,
       };
 
-      const post = await Post.findByIdAndUpdate(
-         postId,
-         { $set: updatedPost },
-         { runValidators: true, new: true }
-      ).exec();
+      const post = await Post.findByIdAndUpdate(postId, updatedPost, {
+         runValidators: true,
+         new: true,
+      }).exec();
 
       if (post === null) {
          throw new AppError("Post not found", 404);

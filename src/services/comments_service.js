@@ -50,11 +50,10 @@ class CommentsService {
          postId: postId,
       };
 
-      const comment = await Comment.findByIdAndUpdate(
-         commentId,
-         { $set: updatedComment },
-         { runValidators: true, new: true }
-      ).exec();
+      const comment = await Comment.findByIdAndUpdate(commentId, updatedComment, {
+         runValidators: true,
+         new: true,
+      }).exec();
 
       if (comment === null) {
          throw new AppError("Comment not found", 404);
