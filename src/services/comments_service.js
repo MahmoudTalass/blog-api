@@ -36,7 +36,7 @@ class CommentsService {
       return await comment.save();
    }
 
-   async updateComment(currentUserId, authorId, text, postId, commentId) {
+   async updateComment(currentUserId, authorId, text, commentId) {
       if (!isValid(commentId)) {
          throw new AppError("Comment not found", 404);
       }
@@ -47,7 +47,6 @@ class CommentsService {
 
       const updatedComment = {
          text,
-         postId: postId,
       };
 
       const comment = await Comment.findByIdAndUpdate(commentId, updatedComment, {

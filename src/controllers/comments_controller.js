@@ -32,13 +32,7 @@ const updateComment = [
       const currentUserId = req.user.id;
       const { commentId } = req.params;
       const { authorId, text, postId } = req.body;
-      const comment = await CommentsService.updateComment(
-         currentUserId,
-         authorId,
-         text,
-         postId,
-         commentId
-      );
+      const comment = await CommentsService.updateComment(currentUserId, authorId, text, commentId);
 
       res.json(comment);
    }),
