@@ -3,9 +3,11 @@ const errorHandler = (err, req, res, next) => {
    const status = err.statusCode || 500;
 
    res.status(status).json({
-      status,
-      message,
-      errors: err.errors,
+      error: {
+         status,
+         message,
+         errors: err.errors,
+      },
    });
 };
 
