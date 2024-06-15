@@ -12,12 +12,16 @@ router.get("/", postsController.getAllPosts);
 /**
  * retrieve a particular post
  */
-router.get("/:postId", postsController.getPost);
+router.get("/:postId", passport.authenticate("jwt", { session: false }), postsController.getPost);
 
 /**
  * retrieve all comments for a particular post
  */
-router.get("/:postId/comments", postsController.getPostComments);
+router.get(
+   "/:postId/comments",
+   passport.authenticate("jwt", { session: false }),
+   postsController.getPostComments
+);
 
 /**
  * create a new post
