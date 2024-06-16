@@ -5,9 +5,16 @@ const isValid = require("mongoose").Types.ObjectId.isValid;
 
 class PostsService {
    async getAllPosts() {
-      return await Post.find({ isPublished: true })
+      return await Post.find(
+         { isPublished: true },
+         {
+            author: 1,
+            title: 1,
+            publishDate: 1,
+         }
+      )
          .populate("author", "name email isAuthor")
-         .sort({ createdAt: -1, _id: 1 })
+         .sort({ publishDate: -1, _id: 1 })
          .exec();
    }
 
