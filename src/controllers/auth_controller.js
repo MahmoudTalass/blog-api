@@ -1,7 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const AuthService = require("../services/auth_service");
 const passport = require("passport");
-const { AppError } = require("../utils/app_error");
+const { AppError, ValidationError } = require("../utils/app_error");
 const { validateSignup, validateLogin } = require("../middlewares/validation");
 
 const signup = [
@@ -24,7 +24,7 @@ const login = [
          }
 
          if (!user) {
-            return next(new AppError(info.message, 401));
+            return next(new ValidationError([info]));
          }
 
          const token = AuthService.createToken(user);
