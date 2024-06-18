@@ -100,7 +100,7 @@ const validateLogin = [
       .isLength({ min: 8 })
       .withMessage("Password must contain at least 8 characters")
       .escape(),
-   (res, req, next) => {
+   (req, res, next) => {
       const errors = validationResult(req);
 
       if (!errors.isEmpty()) {
