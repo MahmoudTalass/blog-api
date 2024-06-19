@@ -33,7 +33,11 @@ class CommentsService {
          postId: postId,
       });
 
-      return await comment.save();
+      await comment.save();
+
+      const populatedComment = await comment.populate("author", "name isAuthor");
+
+      return populatedComment;
    }
 
    async updateComment(currentUserId, authorId, text, commentId) {
@@ -52,7 +56,9 @@ class CommentsService {
       const comment = await Comment.findByIdAndUpdate(commentId, updatedComment, {
          runValidators: true,
          new: true,
-      }).exec();
+      })
+         .populate("author", "name email isAuthor")
+         .exec();
 
       if (comment === null) {
          throw new AppError("Comment not found", 404);
