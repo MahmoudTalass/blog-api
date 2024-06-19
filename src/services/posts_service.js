@@ -24,7 +24,9 @@ class PostsService {
       }
 
       const [post, comments] = await Promise.all([
-         Post.find({ postId, isPublished: true }).populate("author", "name email isAuthor").exec(),
+         Post.findOne({ _id: postId, isPublished: true })
+            .populate("author", "name email isAuthor")
+            .exec(),
          Comment.find({ postId: postId })
             .populate("author", "name email isAuthor")
             .sort({ createdAt: -1, _id: 1 })
