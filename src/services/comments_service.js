@@ -73,7 +73,7 @@ class CommentsService {
       }
 
       if (currentUserId !== authorId) {
-         throw new AppError("You do not have the permission to update this comment", 403);
+         throw new AppError("You do not have the permission to delete this comment", 403);
       }
       const comment = await Post.findByIdAndDelete(commentId).exec();
 
