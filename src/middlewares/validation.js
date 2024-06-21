@@ -16,10 +16,6 @@ const validateComment = [
          return next(new ValidationError(error));
       }
 
-      if (!isValid(req.body.postId)) {
-         return next(new AppError("Invalid object id", 400));
-      }
-
       next();
    },
 ];
