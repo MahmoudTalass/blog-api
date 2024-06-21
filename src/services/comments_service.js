@@ -75,7 +75,7 @@ class CommentsService {
       if (currentUserId !== authorId) {
          throw new AppError("You do not have the permission to delete this comment", 403);
       }
-      const comment = await Post.findByIdAndDelete(commentId).exec();
+      const comment = await Comment.findByIdAndDelete(commentId).exec();
 
       if (comment === null) {
          throw new AppError("Comment not found", 404);
