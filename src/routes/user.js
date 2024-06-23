@@ -7,7 +7,7 @@ const passport = require("passport");
  * retrieve current user info
  */
 router.get(
-   "/",
+   "/me",
    passport.authenticate("jwt", { session: false }),
 
    userController.getCurrentUserInfo
@@ -16,13 +16,17 @@ router.get(
 /**
  * retrieve all posts from current user
  */
-router.get("/posts", passport.authenticate("jwt", { session: false }), userController.getUserPosts);
+router.get(
+   "/me/posts",
+   passport.authenticate("jwt", { session: false }),
+   userController.getUserPosts
+);
 
 /**
  * retrieve all comments by from current user
  */
 router.get(
-   "/comments",
+   "/me/comments",
    passport.authenticate("jwt", { session: false }),
    userController.getUserPosts
 );
