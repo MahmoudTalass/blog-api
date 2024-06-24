@@ -12,7 +12,8 @@ const getCurrentUserInfo = (req, res, next) => {
 };
 
 const getCurrentUserPosts = asyncHandler(async (req, res, next) => {
-   return await UserService.getCurrentUserPosts(req.user.id);
+   const published = req.query.published;
+   return await UserService.getCurrentUserPosts(req.user.id, published);
 });
 
 const getCurrentUserComments = asyncHandler(async (req, res, next) => {

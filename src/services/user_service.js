@@ -4,12 +4,21 @@ const { AppError } = require("../utils/app_error");
 const isValid = require("mongoose").Types.ObjectId.isValid;
 
 class UserService {
-   async getCurrentUserPosts(userId) {
+   async getCurrentUserPosts(userId, published) {
+      if (published === "true" || published === "false") {
+         published = Boolean(published);
+         return await Post.find({ author: userId, isPublished: published })
+            .populate("author", "name email isAuthor")
+            .sort({ createdAt: -1, _id: 1 })
+            .exec();
+      }
+
       return await Post.find({ author: userId })
          .populate("author", "name email isAuthor")
          .sort({ createdAt: -1, _id: 1 })
          .exec();
    }
+
    async getUserPosts(userId) {
       if (!isValid(userId)) {
          throw new AppError("User not found", 404);
