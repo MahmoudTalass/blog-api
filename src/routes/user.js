@@ -19,7 +19,7 @@ router.get(
 router.get(
    "/me/posts",
    passport.authenticate("jwt", { session: false }),
-   userController.getUserPosts
+   userController.getCurrentUserPosts
 );
 
 /**
