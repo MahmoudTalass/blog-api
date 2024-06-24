@@ -13,19 +13,23 @@ const getCurrentUserInfo = (req, res, next) => {
 
 const getCurrentUserPosts = asyncHandler(async (req, res, next) => {
    const published = req.query.published;
-   return await UserService.getCurrentUserPosts(req.user.id, published);
+   const result = await UserService.getCurrentUserPosts(req.user.id, published);
+   res.json(result);
 });
 
 const getCurrentUserComments = asyncHandler(async (req, res, next) => {
-   return await UserService.getUserComments(req.user.id);
+   const result = await UserService.getUserComments(req.user.id);
+   res.json(result);
 });
 
 const getUserPosts = asyncHandler(async (req, res, next) => {
-   return await UserService.getUserPosts(req.params.userId);
+   const result = await UserService.getUserPosts(req.params.userId);
+   res.json(result);
 });
 
 const getUserComments = asyncHandler(async (req, res, next) => {
-   return await UserService.getUserComments(req.params.userId);
+   const result = await UserService.getUserComments(req.params.userId);
+   res.json(result);
 });
 
 module.exports = {
