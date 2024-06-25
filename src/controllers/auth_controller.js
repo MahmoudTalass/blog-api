@@ -11,7 +11,7 @@ const signup = [
       const user = await AuthService.signup(name, email, password, isAuthor);
       const token = AuthService.createToken(user);
 
-      res.status(201).json({ user: user.name, token });
+      res.status(201).json({ name: user.name, token });
    }),
 ];
 
@@ -31,7 +31,7 @@ const login = [
 
          req.login(user, { session: false });
 
-         res.json({ user: user.name, token });
+         res.json({ name: user.name, token });
       })(req, res, next);
    }),
 ];
