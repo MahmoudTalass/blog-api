@@ -36,10 +36,6 @@ const validatePost = [
          return next(new ValidationError(error));
       }
 
-      if (!isValid(req.body.author)) {
-         return next(new AppError("Invalid object id", 400));
-      }
-
       next();
    },
 ];
