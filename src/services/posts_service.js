@@ -69,7 +69,7 @@ class PostsService {
       return await post.save();
    }
 
-   async updatePost(currentUserId, authorId, title, text, isPublished, postId) {
+   async updatePost(currentUserId, authorId, updatedPost, postId) {
       if (!isValid(postId)) {
          throw new AppError("Post not found", 404);
       }
@@ -77,12 +77,6 @@ class PostsService {
       if (currentUserId !== authorId) {
          throw new AppError("You do not have the permission to update this post", 403);
       }
-
-      const updatedPost = {
-         title,
-         text,
-         isPublished,
-      };
 
       const post = await Post.findByIdAndUpdate(postId, updatedPost, {
          runValidators: true,
