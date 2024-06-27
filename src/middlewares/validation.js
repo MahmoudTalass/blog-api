@@ -3,6 +3,7 @@ const User = require("../models/user");
 const { AppError } = require("../utils/app_error");
 const ValidationError = require("../utils/app_error").ValidationError;
 const isValid = require("mongoose").Types.ObjectId.isValid;
+const moment = require("moment");
 
 const validateComment = [
    body("text", "Must provide text").trim().notEmpty().escape(),
@@ -23,9 +24,12 @@ const validateComment = [
 const validatePost = [
    body("title", "Must provide a title").trim().notEmpty().escape(),
    body("text", "Must provide text").trim().notEmpty().escape(),
-   body("isPublished").customSanitizer((value) => {
-      return value === "true" ? true : false;
-   }),
+   body("isPublished").isBoolean(),
+   body("publishDate")
+      .optional()
+      .custom((value) => {
+         return moment(value).isValid();
+      }),
    (req, res, next) => {
       const errors = validationResult(req);
 
