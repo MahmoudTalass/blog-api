@@ -38,16 +38,10 @@ const updatePost = [
    asyncHandler(async (req, res, next) => {
       const currentUserId = req.user.id;
       const { postId } = req.params;
-      const { authorId, title, text, isPublished } = req.body;
+      const authorId = req.body.author._id;
+      const updatedPost = { ...req.body };
 
-      const post = await PostsService.updatePost(
-         currentUserId,
-         authorId,
-         title,
-         text,
-         isPublished,
-         postId
-      );
+      const post = await PostsService.updatePost(currentUserId, authorId, updatedPost, postId);
 
       res.json(post);
    }),
@@ -57,6 +51,7 @@ const deletePost = asyncHandler(async (req, res, next) => {
    const currentUserId = req.user.id;
    const { authorId } = req.body;
    const { postId } = req.params;
+
    await PostsService.deletePost(currentUserId, authorId, postId);
 
    res.sendStatus(204);
