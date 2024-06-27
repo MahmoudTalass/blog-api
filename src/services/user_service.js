@@ -10,9 +10,7 @@ class UserService {
          return await Post.find(
             { author: userId, isPublished: published },
             {
-               author: 1,
-               title: 1,
-               publishDate: 1,
+               text: 0,
             }
          )
             .populate("author", "name email isAuthor")
@@ -20,7 +18,12 @@ class UserService {
             .exec();
       }
 
-      return await Post.find({ author: userId })
+      return await Post.find(
+         { author: userId },
+         {
+            text: 0,
+         }
+      )
          .populate("author", "name email isAuthor")
          .sort({ createdAt: -1, _id: 1 })
          .exec();
