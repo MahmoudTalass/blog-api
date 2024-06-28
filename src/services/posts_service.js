@@ -18,24 +18,33 @@ class PostsService {
          .exec();
    }
 
-   async getPost(postId) {
+   async getPost(postId, authorId, currentUserId) {
       if (!isValid(postId)) {
          throw new AppError("Post not found", 404);
       }
 
-      const [post, comments] = await Promise.all([
-         Post.findOne({ _id: postId, isPublished: true })
+      let post;
+
+      let shouldGetAny = currentUserId === authorId ? true : false;
+
+      if (shouldGetAny) {
+         post = await Post.findOne({ _id: postId })
             .populate("author", "name email isAuthor")
-            .exec(),
-         Comment.find({ postId: postId })
+            .exec();
+      } else {
+         post = await Post.findOne({ _id: postId, isPublished: true })
             .populate("author", "name email isAuthor")
-            .sort({ createdAt: -1, _id: 1 })
-            .exec(),
-      ]);
+            .exec();
+      }
 
       if (post === null) {
          throw new AppError("Post not found", 404);
       }
+
+      const comments = await Comment.find({ postId: postId })
+         .populate("author", "name email isAuthor")
+         .sort({ createdAt: -1, _id: 1 })
+         .exec();
 
       return {
          post,
