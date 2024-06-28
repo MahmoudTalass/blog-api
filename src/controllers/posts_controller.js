@@ -10,7 +10,10 @@ const getAllPosts = asyncHandler(async (req, res, next) => {
 
 const getPost = asyncHandler(async (req, res, next) => {
    const { postId } = req.params;
-   const post = await PostsService.getPost(postId);
+   const { authorId } = req.body;
+   const currentUserId = req.user.id;
+
+   const post = await PostsService.getPost(postId, authorId, currentUserId);
 
    res.json(post);
 });
