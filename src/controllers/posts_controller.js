@@ -10,10 +10,22 @@ const getAllPosts = asyncHandler(async (req, res, next) => {
 
 const getPost = asyncHandler(async (req, res, next) => {
    const { postId } = req.params;
-   const { authorId } = req.body;
    const currentUserId = req.user.id;
+   // this query parameter indicates whether comments of a post should also
+   // be retrieved along with the post.
+   const { comments } = req.query;
 
-   const post = await PostsService.getPost(postId, authorId, currentUserId);
+   /**
+    * if user indicates they want comments along with the post, the json will contain
+    * an object containing the post object and the comments array
+    * {
+    *    posts (object),
+    *    comments (array)
+    * }
+    *
+    * otherwise, the post is sent in the json by itself.
+    * */
+   const post = await PostsService.getPost(postId, currentUserId, comments);
 
    res.json(post);
 });

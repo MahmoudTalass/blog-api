@@ -18,38 +18,34 @@ class PostsService {
          .exec();
    }
 
-   async getPost(postId, authorId, currentUserId) {
+   async getPost(postId, currentUserId, shouldGetComments) {
       if (!isValid(postId)) {
          throw new AppError("Post not found", 404);
       }
 
-      let post;
-
-      let shouldGetAny = currentUserId === authorId ? true : false;
-
-      if (shouldGetAny) {
-         post = await Post.findOne({ _id: postId })
-            .populate("author", "name email isAuthor")
-            .exec();
-      } else {
-         post = await Post.findOne({ _id: postId, isPublished: true })
-            .populate("author", "name email isAuthor")
-            .exec();
-      }
+      // find the post with the given post id and if the author is equal to the current
+      // user grab the post despite publish status and if the author of the post isn't
+      // the current user, then only grab the post if its unpublished.
+      const post = await Post.findOne({
+         _id: postId,
+         $or: [{ author: currentUserId }, { isPublished: true }],
+      })
+         .populate("author", "name email isAuthor")
+         .exec();
 
       if (post === null) {
          throw new AppError("Post not found", 404);
       }
 
-      const comments = await Comment.find({ postId: postId })
-         .populate("author", "name email isAuthor")
-         .sort({ createdAt: -1, _id: 1 })
-         .exec();
+      let comments = null;
+      if (shouldGetComments) {
+         comments = await Comment.find({ postId: postId })
+            .populate("author", "name email isAuthor")
+            .sort({ createdAt: -1, _id: 1 })
+            .exec();
+      }
 
-      return {
-         post,
-         comments,
-      };
+      return comments ? { post, comments } : post;
    }
 
    async getPostComments(postId) {
