@@ -4,20 +4,7 @@ const { AppError } = require("../utils/app_error");
 const isValid = require("mongoose").Types.ObjectId.isValid;
 
 class UserService {
-   async getCurrentUserPosts(userId, published) {
-      if (published === "true" || published === "false") {
-         published = Boolean(published);
-         return await Post.find(
-            { author: userId, isPublished: published },
-            {
-               text: 0,
-            }
-         )
-            .populate("author", "name email isAuthor")
-            .sort({ createdAt: -1, _id: 1 })
-            .exec();
-      }
-
+   async getCurrentUserPosts(userId) {
       return await Post.find(
          { author: userId },
          {

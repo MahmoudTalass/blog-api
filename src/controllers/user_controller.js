@@ -12,8 +12,7 @@ const getCurrentUserInfo = (req, res, next) => {
 };
 
 const getCurrentUserPosts = asyncHandler(async (req, res, next) => {
-   const published = req.query.published;
-   const result = await UserService.getCurrentUserPosts(req.user.id, published);
+   const result = await UserService.getCurrentUserPosts(req.user.id);
    res.json(result);
 });
 
