@@ -1,4 +1,5 @@
 const Comment = require("../models/comment");
+const Post = require("../models/post");
 const AppError = require("../utils/app_error").AppError;
 const isValid = require("mongoose").Types.ObjectId.isValid;
 
@@ -26,9 +27,9 @@ class CommentsService {
       return comment;
    }
 
-   async createComment(authorId, text, postId) {
+   async createComment(currentUserId, text, postId) {
       const comment = new Comment({
-         author: authorId,
+         author: currentUserId,
          text,
          postId: postId,
       });
@@ -40,46 +41,51 @@ class CommentsService {
       return populatedComment;
    }
 
-   async updateComment(currentUserId, authorId, text, commentId) {
+   async updateComment(currentUserId, text, commentId) {
       if (!isValid(commentId)) {
          throw new AppError("Comment not found", 404);
       }
 
-      if (currentUserId !== authorId) {
+      const comment = await Comment.findById(commentId).exec();
+
+      if (comment === null) {
+         throw new AppError("Comment not found", 404);
+      }
+
+      // if the user isn't the author of the comment, then they don't have permission to update it.
+      if (currentUserId !== comment.author.toString()) {
          throw new AppError("You do not have the permission to update this comment", 403);
       }
 
-      const updatedComment = {
-         text,
-      };
+      comment.text = text;
 
-      const comment = await Comment.findByIdAndUpdate(commentId, updatedComment, {
-         runValidators: true,
-         new: true,
-      })
-         .populate("author", "name email isAuthor")
-         .exec();
-
-      if (comment === null) {
-         throw new AppError("Comment not found", 404);
-      }
-
-      return comment;
+      return await comment.save();
    }
 
-   async deleteComment(currentUserId, authorId, commentId) {
+   async deleteComment(currentUserId, commentId) {
       if (!isValid(commentId)) {
          throw new AppError("Comment not found", 404);
       }
 
-      if (currentUserId !== authorId) {
-         throw new AppError("You do not have the permission to delete this comment", 403);
-      }
-      const comment = await Comment.findByIdAndDelete(commentId).exec();
+      const comment = await Comment.findById(commentId).exec();
 
       if (comment === null) {
          throw new AppError("Comment not found", 404);
       }
+
+      const post = await Post.findById(comment.postId.toString()).exec();
+
+      if (post === null) {
+         throw new AppError("This comment does not belong to a post and cannot be deleted.", 403);
+      }
+
+      // if current user isn't the author of the comment or the author of the post that this comment is under,
+      // then they do not have the permission to delete the post.
+      if (currentUserId !== comment.author.toString() || currentUserId !== post.author.toString()) {
+         throw new AppError("You do not have the permission to delete this comment", 403);
+      }
+
+      Comment.deleteOne({ _id: commentId }).exec();
    }
 }
 

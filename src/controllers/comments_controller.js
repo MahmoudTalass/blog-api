@@ -18,7 +18,7 @@ const getComment = asyncHandler(async (req, res, next) => {
 const createComment = [
    ...validateComment,
    asyncHandler(async (req, res, next) => {
-      const authorId = req.user.id;
+      const currentUserId = req.user.id;
       const { text, postId } = req.body;
       const comment = await CommentsService.createComment(authorId, text, postId);
 
@@ -31,8 +31,8 @@ const updateComment = [
    asyncHandler(async (req, res, next) => {
       const currentUserId = req.user.id;
       const { commentId } = req.params;
-      const { authorId, text } = req.body;
-      const comment = await CommentsService.updateComment(currentUserId, authorId, text, commentId);
+      const { text } = req.body;
+      const comment = await CommentsService.updateComment(currentUserId, text, commentId);
 
       res.json(comment);
    }),
@@ -41,9 +41,8 @@ const updateComment = [
 const deleteComment = asyncHandler(async (req, res, next) => {
    const currentUserId = req.user.id;
    const { commentId } = req.params;
-   const { authorId } = req.body;
 
-   await CommentsService.deleteComment(currentUserId, authorId, commentId);
+   await CommentsService.deleteComment(currentUserId, commentId);
 
    res.sendStatus(204);
 });
