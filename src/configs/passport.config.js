@@ -35,7 +35,7 @@ const jwtStrategyOptions = {
 
 const jwtStrategy = new JwtStrategy(jwtStrategyOptions, async (jwtPayload, done) => {
    try {
-      const user = await User.findById(jwtPayload.id);
+      const user = await User.findById(jwtPayload.id).exec();
       if (!user) {
          throw new AppError("User not found", 404);
       }
