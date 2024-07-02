@@ -20,7 +20,7 @@ const createComment = [
    asyncHandler(async (req, res, next) => {
       const currentUserId = req.user.id;
       const { text, postId } = req.body;
-      const comment = await CommentsService.createComment(authorId, text, postId);
+      const comment = await CommentsService.createComment(currentUserId, text, postId);
 
       res.status(201).json(comment);
    }),

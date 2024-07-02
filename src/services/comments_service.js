@@ -81,7 +81,7 @@ class CommentsService {
 
       // if current user isn't the author of the comment or the author of the post that this comment is under,
       // then they do not have the permission to delete the post.
-      if (currentUserId !== comment.author.toString() || currentUserId !== post.author.toString()) {
+      if (currentUserId !== comment.author.toString() && currentUserId !== post.author.toString()) {
          throw new AppError("You do not have the permission to delete this comment", 403);
       }
 
