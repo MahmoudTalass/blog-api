@@ -2,7 +2,6 @@ const { body, validationResult } = require("express-validator");
 const User = require("../models/user");
 const { AppError } = require("../utils/app_error");
 const ValidationError = require("../utils/app_error").ValidationError;
-const isValid = require("mongoose").Types.ObjectId.isValid;
 const moment = require("moment");
 
 const validateComment = [
