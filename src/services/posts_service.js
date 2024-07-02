@@ -74,34 +74,42 @@ class PostsService {
       return await post.save();
    }
 
-   async updatePost(currentUserId, authorId, updatedPost, postId) {
+   async updatePost(currentUserId, updatedPost, postId) {
       if (!isValid(postId)) {
          throw new AppError("Post not found", 404);
       }
 
-      if (currentUserId !== authorId) {
-         throw new AppError("You do not have the permission to update this post", 403);
-      }
-
-      const post = await Post.findByIdAndUpdate(postId, updatedPost, {
-         runValidators: true,
-         new: true,
-      }).exec();
+      const post = await Post.findById(postId).exec();
 
       if (post === null) {
          throw new AppError("Post not found", 404);
       }
 
-      return post;
+      if (currentUserId !== post.author.toString()) {
+         throw new AppError("You do not have the permission to update this post", 403);
+      }
+
+      const updated = await Post.findByIdAndUpdate(postId, updatedPost, {
+         runValidators: true,
+         new: true,
+      }).exec();
+
+      return updated;
    }
 
-   async deletePost(currentUserId, authorId, postId) {
+   async deletePost(currentUserId, postId) {
       if (!isValid(postId)) {
          throw new AppError("Post not found", 404);
       }
 
-      if (currentUserId !== authorId) {
-         throw new AppError("You do not have the permission to update this post", 403);
+      const post = await Post.findById(postId).exec();
+
+      if (post === null) {
+         throw new AppError("Post not found", 404);
+      }
+
+      if (currentUserId !== post.author.toString()) {
+         throw new AppError("You do not have the permission to delete this post", 403);
       }
 
       const session = await Post.startSession();
@@ -109,11 +117,7 @@ class PostsService {
       try {
          session.startTransaction();
 
-         const post = await Post.findByIdAndDelete(postId, { session }).exec();
-
-         if (post === null) {
-            throw new AppError("Post not found", 404);
-         }
+         await Post.deleteOne({ _id: postId }, { session });
 
          await Comment.deleteMany({ postId }, { session }).exec();
 
